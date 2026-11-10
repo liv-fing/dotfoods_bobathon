@@ -11,16 +11,16 @@ Everything you need to complete the lab is available on the hosted lab site. Sta
 **Participant Setup** — Interactive setup guide with screenshots.
 https://liv-fing.github.io/dotfoods_bobathon/setup.html
 
-**Lab Guide** — Full exercise catalog with step-by-step instructions.
-https://liv-fing.github.io/dotfoods_bobathon/
-
 <details>
-<summary>Offline setup guides (PDF-ready Markdown)</summary>
+<summary>Offline setup guides</summary>
 
 - [Stage 1 — On Your Own](docs/setup-stage-1.md) — Install Bob and verify your extensions before the event.
 - [Stage 2 — Setup Session](docs/setup-stage-2.md) — Connect to IBM i and configure your workspace with your instructor.
 
 </details>
+
+**Lab Guide** — Full exercise catalog with step-by-step instructions.
+https://liv-fing.github.io/dotfoods_bobathon/
 
 ---
 
