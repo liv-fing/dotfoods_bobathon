@@ -135,6 +135,8 @@
   var DEFAULT_TRACK_SLUGS = ['setup', 'track-1', 'track-2', 'track-7', 'track-4', 'track-6', 'track-5', 'track-3'];
   // Tracks shown inside the collapsed "Additional Exercises" group.
   var ADDITIONAL_SLUGS = ['track-5', 'track-3'];
+  // Tracks shown inside the collapsed "Environment Setup" group.
+  var SETUP_SLUGS = ['setup'];
   var cfgTracks = (window.FLIGHT400_CONFIG || {}).tracks;
   var TRACK_SLUGS = (cfgTracks && cfgTracks.length) ? cfgTracks : DEFAULT_TRACK_SLUGS;
 
@@ -144,8 +146,34 @@
   var localBase = window.location.pathname.replace(/\/?$/, '/');
 
   var stream = document.getElementById('tracks-stream');
+  var setupGroup = null;   // created when setup track loads
+  var setupInner = null;
   var extraGroup = null;   // created when the first additional track loads
   var extraInner = null;
+
+  // Builds the collapsed "Environment Setup" group and returns its inner container.
+  function createSetupGroup() {
+    setupGroup = document.createElement('div');
+    setupGroup.className = 'extra-group';
+    setupGroup.innerHTML =
+      '<button class="extra-toggle" type="button" aria-expanded="false" aria-controls="setup-body">' +
+        '<span class="extra-toggle-label">Environment Setup</span>' +
+        '<span class="card-chevron" aria-hidden="true">' +
+          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l5 5 5-5"/></svg>' +
+        '</span>' +
+      '</button>' +
+      '<div class="extra-body" id="setup-body"><div class="extra-body-inner"></div></div>';
+    stream.appendChild(setupGroup);
+    setupInner = setupGroup.querySelector('.extra-body-inner');
+
+    setupGroup.querySelector('.extra-toggle').addEventListener('click', function () {
+      var isOpen = setupGroup.classList.toggle('extra-open');
+      this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) {
+        setupInner.querySelectorAll('.bubble-card').forEach(function (c) { c.classList.add('bubble-in'); });
+      }
+    });
+  }
 
   // Builds the collapsed "Additional Exercises" group and returns its inner container.
   function createExtraGroup() {
@@ -198,7 +226,10 @@
       .then(function (html) {
         var wrapper = document.createElement('div');
         wrapper.innerHTML = html;
-        if (ADDITIONAL_SLUGS.indexOf(slug) !== -1) {
+        if (SETUP_SLUGS.indexOf(slug) !== -1) {
+          if (!setupGroup) createSetupGroup();
+          while (wrapper.firstChild) setupInner.appendChild(wrapper.firstChild);
+        } else if (ADDITIONAL_SLUGS.indexOf(slug) !== -1) {
           if (!extraGroup) createExtraGroup();
           while (wrapper.firstChild) extraInner.appendChild(wrapper.firstChild);
         } else {
