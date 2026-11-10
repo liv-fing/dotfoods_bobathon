@@ -226,7 +226,8 @@
       .then(function (html) {
         var wrapper = document.createElement('div');
         wrapper.innerHTML = html;
-        if (SETUP_SLUGS.indexOf(slug) !== -1) {
+        var collapseSetup = (window.FLIGHT400_CONFIG || {}).collapseSetup !== false;
+        if (SETUP_SLUGS.indexOf(slug) !== -1 && collapseSetup) {
           if (!setupGroup) createSetupGroup();
           while (wrapper.firstChild) setupInner.appendChild(wrapper.firstChild);
         } else if (ADDITIONAL_SLUGS.indexOf(slug) !== -1) {
