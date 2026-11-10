@@ -132,9 +132,9 @@
   // window.FLIGHT400_TRACK_PREFIX is retained for backwards compatibility
   // but is superseded by the local-override mechanism above.
 
-  var DEFAULT_TRACK_SLUGS = ['setup', 'track-1', 'track-2', 'track-3', 'track-4', 'track-5', 'track-6', 'track-7'];
+  var DEFAULT_TRACK_SLUGS = ['setup', 'track-1', 'track-2', 'track-7', 'track-4', 'track-6', 'track-5', 'track-3'];
   // Tracks shown inside the collapsed "Additional Exercises" group.
-  var ADDITIONAL_SLUGS = ['track-3', 'track-4', 'track-6'];
+  var ADDITIONAL_SLUGS = ['track-5', 'track-3'];
   var cfgTracks = (window.FLIGHT400_CONFIG || {}).tracks;
   var TRACK_SLUGS = (cfgTracks && cfgTracks.length) ? cfgTracks : DEFAULT_TRACK_SLUGS;
 
