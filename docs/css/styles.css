@@ -486,6 +486,7 @@ pre, code, kbd, samp {
 
 /* ── USE CASES ── */
 .use-cases { display: flex; flex-direction: column; gap: 14px; }
+.setup-section-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); padding: 6px 0 2px; border-top: 1px solid var(--border); margin-top: 0.5rem; }
 .use-case {
   background: #14171f; border: 1px solid var(--border);
   border-radius: 14px; overflow: hidden;
