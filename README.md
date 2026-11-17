@@ -22,6 +22,12 @@ https://liv-fing.github.io/dotfoods_bobathon/setup.html
 **Lab Guide** — Full exercise catalog with step-by-step instructions.
 https://liv-fing.github.io/dotfoods_bobathon/
 
+**Offline copy of the lab guide** — Use this if you want to read the whole guide (setup and all exercises, with screenshots) locally on your computer.
+
+1. Download the zip: https://github.com/liv-fing/dotfoods_bobathon/raw/main/offline.zip
+2. Unzip it and open the `offline` folder.
+3. Double-click **`index.html`**. It opens in your web browser. It is one self-contained file (about 21 MB) with all the screenshots built in.
+
 ---
 
 ## For Instructors
@@ -29,3 +35,5 @@ https://liv-fing.github.io/dotfoods_bobathon/
 The instructor setup guide covers provisioning the IBM i environment, restoring the FLIGHT400 application, and preparing participant libraries before the event.
 
 **Instructor Setup Guide** — [instructor-setup/README.md](instructor-setup/README.md)
+
+**Updating the offline copy** — The `offline/` folder and `offline.zip` are generated from `docs/` by `build-offline.py`. After you change anything under `docs/`, run `python3 build-offline.py` from the repository root and commit the updated `offline/` folder and `offline.zip`.
