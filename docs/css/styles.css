@@ -569,6 +569,15 @@ pre, code, kbd, samp {
 }
 .step-prompt .copy-btn { top: 8px; right: 8px; }
 
+/* Collapsible skill text */
+.skill-details { margin-top: 10px; }
+.skill-details summary {
+  cursor: pointer; font-size: 0.85rem; font-weight: 600;
+  color: var(--accent); padding: 6px 0; list-style-position: inside;
+}
+.skill-details summary:hover { text-decoration: underline; }
+.skill-details .step-prompt pre { max-height: 360px; overflow: auto; }
+
 /* Copy button */
 .copy-btn {
   position: absolute; top: 10px; right: 10px;
