@@ -252,15 +252,6 @@
   // ── CARD INIT (called after all partials are loaded) ──────────────────────
   function initCards() {
 
-    // Inject Box folder link into Setup step 5 sub-step 2 if configured
-    var cfg = window.FLIGHT400_CONFIG || {};
-    if (cfg.boxFolderUrl) {
-      var boxContainer = document.getElementById('box-folder-link-container');
-      if (boxContainer) {
-        boxContainer.innerHTML = '<a href="' + cfg.boxFolderUrl + '" target="_blank" rel="noopener" style="color:var(--ibm-blue);font-weight:600">this Box folder↗</a>';
-      }
-    }
-
     var cards = document.querySelectorAll('.bubble-card');
 
     // Bubble pop-in via IntersectionObserver
@@ -341,8 +332,21 @@
       });
     }
 
-    // Restore previously selected student on load
+    // IP address box (step 0.3): validate on every keystroke, show a message on blur
+    document.addEventListener('input',  function (e) { if (e.target && e.target.id === 'server-ip') setIpFromInput(e.target.value, false); });
+    document.addEventListener('change', function (e) { if (e.target && e.target.id === 'server-ip') setIpFromInput(e.target.value, true); });
+
+    // Restore previously entered IP address and selected student on load
+    restoreServerSelection();
     restoreStudentSelection();
+    refreshBadge();   // shows the "choose" flag if nothing is selected yet
+
+    if (gfBadgeNameEl) {
+      gfBadgeNameEl.addEventListener('click', jumpToSelection);
+      gfBadgeNameEl.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jumpToSelection(); }
+      });
+    }
   }
 
   // ── STUDENT SELECTION ────────────────────────────────────────────────────
@@ -350,6 +354,47 @@
   var gfBadgeEl      = document.getElementById('gf-student-badge');
   var gfBadgeNameEl  = document.getElementById('student-badge-name');
   var gfBadgeClearEl = document.getElementById('student-badge-clear');
+
+  // ── SERVER IP ADDRESS ────────────────────────────────────────────────────
+  // Fills <myIPaddress> (from the IP address the attendee pastes once in step 0.3)
+  // across the guide. No IP address is stored in this code.
+  var IP_KEY     = 'flight400-ip-v1';
+  var IPV4_RE = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+  var studentSel   = null;   // { num, nn, libNum, port } once a row is chosen
+  var ipVal        = null;   // validated IPv4 string once pasted in step 0.3
+  var badgeStudent = null;   // { num, libNum, port, name } for the badge
+
+  function restoreServerSelection() {
+    var ip = null;
+    try { ip = localStorage.getItem(IP_KEY); } catch (e) {}
+    if (ip && IPV4_RE.test(ip)) {
+      ipVal = ip;
+      document.querySelectorAll('#server-ip').forEach(function (el) { el.value = ip; });
+    }
+    if (!ipVal) return;
+    applyAllReplacements();
+    refreshBadge();
+  }
+
+  // Called when the attendee types or pastes in the IP box (step 0.3).
+  // Only a valid IPv4 address is accepted; anything else clears the value.
+  function setIpFromInput(raw, showMsg) {
+    var v = (raw || '').trim();
+    var msg = document.getElementById('server-ip-msg');
+    var ok = IPV4_RE.test(v);
+    if (ok) {
+      ipVal = v;
+      try { localStorage.setItem(IP_KEY, v); } catch (e) {}
+    } else if (ipVal !== null) {
+      ipVal = null;
+      try { localStorage.removeItem(IP_KEY); } catch (e) {}
+    }
+    if (msg) {
+      msg.textContent = (!ok && v && showMsg) ? 'Enter a valid IP address: four numbers from 0 to 255 separated by dots.' : '';
+    }
+    applyAllReplacements();
+    refreshBadge();
+  }
 
   function padNum(n) {
     return n < 10 ? '0' + n : '' + n;
@@ -388,7 +433,7 @@
   }
 
   function clearStudent() {
-    try { localStorage.removeItem(STUDENT_KEY); } catch (e) {}
+    try { localStorage.removeItem(STUDENT_KEY); localStorage.removeItem(IP_KEY); } catch (e) {}
     // Reload to restore original placeholder text
     window.location.reload();
   }
@@ -409,33 +454,43 @@
   }
 
   function applyStudentReplacements(num, nn, libNum, port) {
+    studentSel = { num: num, nn: nn, libNum: libNum, port: port };
+    applyAllReplacements();
+  }
+
+  function applyAllReplacements() {
     var root = document.getElementById('tracks-stream') || document.body;
 
     // Replace text in <pre> elements — always from original
     root.querySelectorAll('pre').forEach(function (pre) {
-      pre.textContent = replaceTokens(getOriginal(pre), num, nn, libNum, port);
+      pre.textContent = replaceTokens(getOriginal(pre));
     });
 
     // Replace in step descriptions and info boxes (text nodes only — skip code/pre)
-    root.querySelectorAll('.step-desc, .uc-desc, .info-box, .warn-box, .detail-intro, .data-table td, .step-screenshot-caption').forEach(function (el) {
-      replaceTextNodes(el, num, nn, libNum, port);
+    root.querySelectorAll('.step-title, .step-desc, .uc-desc, .info-box, .warn-box, .detail-intro, .data-table td, .step-screenshot-caption').forEach(function (el) {
+      replaceTextNodes(el);
     });
   }
 
-  function replaceTokens(text, num, nn, libNum, port) {
-    // Order matters: most-specific patterns first
-    return text
-      .replace(/FLGHTSZ4nn/gi, 'FLGHTSZ' + libNum)
-      .replace(/FLIGHT4nn/gi,  'FLIGHT' + libNum)
-      .replace(/FLGHT4nn/gi,   'FLGHT' + libNum)
-      .replace(/flght4nn/gi,   'flght' + libNum)
-      .replace(/flight4nn/gi,  'flight' + libNum)
-      .replace(/\b4nn\b/g,     String(libNum))
-      .replace(/\b30nn\b/g,    String(port))
-      .replace(/(?<![0-9])nn\b/g, nn);
+  function replaceTokens(text) {
+    if (studentSel) {
+      var nn = studentSel.nn, libNum = studentSel.libNum, port = studentSel.port;
+      // Order matters: most-specific patterns first
+      text = text
+        .replace(/FLGHTSZ4nn/gi, 'FLGHTSZ' + libNum)
+        .replace(/FLIGHT4nn/gi,  'FLIGHT' + libNum)
+        .replace(/FLGHT4nn/gi,   'FLGHT' + libNum)
+        .replace(/flght4nn/gi,   'flght' + libNum)
+        .replace(/flight4nn/gi,  'flight' + libNum)
+        .replace(/\b4nn\b/g,     String(libNum))
+        .replace(/\b30nn\b/g,    String(port))
+        .replace(/(?<![0-9])nn\b/g, nn);
+    }
+    if (ipVal) text = text.replace(/<myIPaddress>/g, ipVal);
+    return text;
   }
 
-  function replaceTextNodes(el, num, nn, libNum, port) {
+  function replaceTextNodes(el) {
     var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
       acceptNode: function (node) {
         var tag = node.parentElement && node.parentElement.tagName;
@@ -446,13 +501,13 @@
     var node;
     while ((node = walker.nextNode())) {
       var orig = getOriginal(node);
-      var replaced = replaceTokens(orig, num, nn, libNum, port);
+      var replaced = replaceTokens(orig);
       if (replaced !== node.textContent) node.textContent = replaced;
     }
     // Also replace inside <code> elements (inline code, not pre>code)
     el.querySelectorAll('code').forEach(function (c) {
       if (c.closest('pre')) return;
-      c.textContent = replaceTokens(getOriginal(c), num, nn, libNum, port);
+      c.textContent = replaceTokens(getOriginal(c));
     });
   }
 
@@ -471,16 +526,63 @@
   }
 
   function updateStudentBadge(num, libNum, port, name) {
+    badgeStudent = { num: num, libNum: libNum, port: port, name: name };
+    refreshBadge();
+  }
+
+  function refreshBadge() {
     if (!gfBadgeEl) return;
+    var dot = '<span style="opacity:0.4;margin:0 5px">·</span>';
+    var parts = [];
+    if (badgeStudent) {
+      var st = badgeStudent;
+      parts.push(st.name
+        ? '<strong>' + st.name + '</strong>' + dot + 'FLGHT' + st.libNum
+        : '<span style="opacity:0.6;font-weight:500;font-size:0.68rem">Student&nbsp;</span><strong>' + st.num + '</strong>' + dot + 'FLGHT' + st.libNum);
+      parts.push('<span style="font-family:var(--font-mono)">:' + st.port + '</span>');
+    }
+    var missing = [];
+    if (!ipVal)        missing.push('IP address');
+    if (!badgeStudent) missing.push('library');
+    if (missing.length) {
+      var list = missing.length > 1
+        ? missing.slice(0, -1).join(', ') + ' and ' + missing[missing.length - 1]
+        : missing[0];
+      parts.push('<span class="badge-flag">⚠ Set your ' + list + ' (step 0.3)</span>');
+    }
+    gfBadgeEl.classList.toggle('needs-choice', missing.length > 0);
+    if (gfBadgeClearEl) gfBadgeClearEl.style.display = (ipVal || badgeStudent) ? '' : 'none';
     if (gfBadgeNameEl) {
-      var dot = '<span style="opacity:0.4;margin:0 5px">·</span>';
-      var label = name
-        ? '<strong>' + name + '</strong>' + dot + 'FLGHT' + libNum
-        : '<span style="opacity:0.6;font-weight:500;font-size:0.68rem">Student&nbsp;</span><strong>' + num + '</strong>' + dot + 'FLGHT' + libNum;
-      gfBadgeNameEl.innerHTML = label + dot + '<span style="font-family:var(--font-mono)">:' + port + '</span>';
+      gfBadgeNameEl.innerHTML = parts.join(dot);
+      gfBadgeNameEl.setAttribute('role', 'button');
+      gfBadgeNameEl.setAttribute('tabindex', '0');
+      gfBadgeNameEl.setAttribute('title', 'Go to step 0.3');
     }
     gfBadgeEl.classList.remove('hidden');
     syncBadgeOffset();
+  }
+
+  // Opens Setup (if collapsed), the Setup card and step 0.3, then scrolls to it.
+  function jumpToSelection() {
+    var table = document.getElementById('attendee-table');
+    if (!table) return;
+    var uc   = table.closest('.use-case');
+    var card = table.closest('.bubble-card');
+    if (setupGroup && !setupGroup.classList.contains('extra-open')) {
+      var toggle = setupGroup.querySelector('.extra-toggle');
+      if (toggle) toggle.click();
+    }
+    if (card && !card.classList.contains('open')) {
+      document.querySelectorAll('.bubble-card.open').forEach(function (c) { c.classList.remove('open'); });
+      card.classList.add('open');
+    }
+    if (uc) {
+      uc.closest('.use-cases').querySelectorAll('.use-case').forEach(function (u) { u.classList.remove('uc-open'); });
+      uc.classList.add('uc-open');
+    }
+    setTimeout(function () {
+      (uc || table).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 500);
   }
 
   if (gfBadgeClearEl) {

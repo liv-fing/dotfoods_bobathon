@@ -12,11 +12,6 @@
  * primaryColor  Hex — overrides --primary CSS token. Default: IBM Blue #0F62FE.
  * accentColor   Hex — overrides --accent CSS token. Default: IBM Gold #F0AB00.
  *
- * boxFolderUrl  URL to the Box folder containing the IBM i credentials and
- *               ssh_private_key.pem for this engagement. Rendered as a link in
- *               Setup step 5 (Connect Bob IDE to IBM i). Omit or set to null to
- *               hide the link.
- *
  * agendaItems   Array of agenda sessions rendered into the "Event Agenda" modal.
  *               Remove or set to [] to hide the Agenda button entirely.
  *               Each item: { time: string, title: string, bullets: string[] }
@@ -53,10 +48,6 @@ window.FLIGHT400_CONFIG = {
 
   primaryColor: '#0F62FE',             // ← optional brand color override
   accentColor:  '#F0AB00',             // ← optional accent color override
-
-  // ← REPLACE with the Box folder URL containing credentials & ssh_private_key.pem
-  // Set to null to hide the link entirely.
-  boxFolderUrl: null,
 
   /**
    * Agenda sessions — remove this array entirely to hide the Agenda button.
