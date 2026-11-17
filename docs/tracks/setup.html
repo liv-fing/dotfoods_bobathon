@@ -9,6 +9,7 @@
       <div class="card-label">Setup</div>
       <div class="card-title">Environment Setup</div>
       <div class="card-desc">Connect to your IBM i, install the required extensions, and confirm your assigned library number before starting the exercises.</div>
+      <div class="card-desc card-desc-alert">Action required: in step 0.3, paste your server IP address and click the table row with your assigned library number. This updates the IP address, library, port, and prompts throughout the guide.</div>
       <div class="card-meta">
         <span class="card-tag">~15 min</span>
         <span class="card-tag">Required</span>
@@ -165,7 +166,7 @@
         <!-- Step 3: Library number -->
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">0.3 — Find Your Assigned Library Number</div>
+            <div class="uc-title">0.3 — Choose Your Server, IP Address and Library Number</div>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
           <div class="uc-body"><div class="uc-body-inner">
@@ -173,7 +174,13 @@
               <div class="mode-step">
                 <div class="step-num">1</div>
                 <div class="step-body">
-                  <div class="step-desc">Your instructor will assign you a library number. Each participant has their own copy of the FLIGHT400 application in a library named <strong>FLGHT4nn</strong> (e.g. FLGHT401, FLGHT402). <strong>Use only your assigned number throughout all exercises so everyone can work independently. To update all references in this guide with your number, select your name below.</strong></div>
+                  <div class="step-desc">Your instructor will assign you a library number. Each participant has their own copy of the FLIGHT400 application in a library named <strong>FLGHT4nn</strong> (e.g. FLGHT401, FLGHT402). Use only your assigned number throughout the exercises so everyone can work independently.</div>
+                  <div class="warn-box"><strong>Action required (2 things):</strong> (1) <strong>paste the IP address</strong> your instructor gave you into the box, and (2) in the table below, <strong>click the row with your assigned library number</strong>. You only do this once. The IP address, library name, dev port, and prompts throughout this guide update to match.</div>
+                  <div class="server-ip-field">
+                    <label for="server-ip">IP address of your server (from your instructor)</label>
+                    <input type="text" id="server-ip" inputmode="decimal" autocomplete="off" spellcheck="false" maxlength="15" placeholder="paste the IP address here" aria-describedby="server-ip-msg" />
+                    <div class="server-ip-msg" id="server-ip-msg" role="status" aria-live="polite"></div>
+                  </div>
                   <div class="info-box">💡 <strong>Spelling note:</strong> The library name is <code>FLGHT4nn</code> — note there is <strong>no "I"</strong> in FLGHT. Your instructor may say "Flight 4-nn" verbally, but when typing always use <code>FLGHT4nn</code> (F‑L‑G‑H‑T).</div>
                   <table class="data-table" id="attendee-table">
                     <thead>
