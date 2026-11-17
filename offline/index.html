@@ -1491,18 +1491,24 @@ footer {
     var localUrl  = localBase + 'tracks/' + file + cb;
     var sharedUrl = 'tracks/' + file + cb;   // resolves via <base href="../"> to docs/tracks/
 
-    fetch(localUrl)
-      .then(function (r) {
-        if (!r.ok) throw new Error('no local override');
-        return r.text();
-      })
-      .catch(function () {
-        // No local override — fall back to shared docs/tracks/
-        return fetch(sharedUrl).then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status + ' loading shared ' + sharedUrl);
-          return r.text();
-        });
-      })
+    // Offline build: track HTML is embedded in the page (fetch() is blocked on file://).
+    var inline = window.FLIGHT400_INLINE_TRACKS;
+    var htmlPromise = (inline && typeof inline[slug] === 'string')
+      ? Promise.resolve(inline[slug])
+      : fetch(localUrl)
+          .then(function (r) {
+            if (!r.ok) throw new Error('no local override');
+            return r.text();
+          })
+          .catch(function () {
+            // No local override — fall back to shared docs/tracks/
+            return fetch(sharedUrl).then(function (r) {
+              if (!r.ok) throw new Error('HTTP ' + r.status + ' loading shared ' + sharedUrl);
+              return r.text();
+            });
+          });
+
+    htmlPromise
       .then(function (html) {
         var wrapper = document.createElement('div');
         wrapper.innerHTML = html;
