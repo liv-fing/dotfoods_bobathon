@@ -23,7 +23,7 @@ Your instructor will assign you a library number. Each participant has their own
 | 9  | `FLGHT409` | 3009 | `http://localhost:3009` |
 | 10 | `FLGHT410` | 3010 | `http://localhost:3010` |
 
-> 💡 The **Dev Port** is only needed for Exercise 4.
+> 💡 The **Dev Port** is only needed for Exercise 3.
 
 ---
 
@@ -61,9 +61,9 @@ Click the **+** icon above the Bob chat window. Select **New Task in Library Lis
 
 ---
 
-## 0.5 — (Optional) SSH Tunnel
+## 0.5 — SSH Tunnel
 
-Only needed for green-screen access and Exercise 4.
+Needed for Exercise 3 and for the optional green-screen view.
 
 **Step 1 — Set key file permissions**
 
