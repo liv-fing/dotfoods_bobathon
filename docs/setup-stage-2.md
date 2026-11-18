@@ -4,7 +4,7 @@ Complete these steps during the setup session with your instructor. You will nee
 
 ---
 
-## 0.3 — Find Your Assigned Library Number
+## 0.3 — Choose Your Server, IP Address and Library Number
 
 Your instructor will assign you a library number. Each participant has their own copy of the FLIGHT400 application in a library named **FLGHT4nn** (e.g. FLGHT401, FLGHT402). Use only your assigned number throughout all exercises so everyone can work independently.
 
@@ -22,16 +22,6 @@ Your instructor will assign you a library number. Each participant has their own
 | 8  | `FLGHT408` | 3008 | `http://localhost:3008` |
 | 9  | `FLGHT409` | 3009 | `http://localhost:3009` |
 | 10 | `FLGHT410` | 3010 | `http://localhost:3010` |
-| 11 | `FLGHT411` | 3011 | `http://localhost:3011` |
-| 12 | `FLGHT412` | 3012 | `http://localhost:3012` |
-| 13 | `FLGHT413` | 3013 | `http://localhost:3013` |
-| 14 | `FLGHT414` | 3014 | `http://localhost:3014` |
-| 15 | `FLGHT415` | 3015 | `http://localhost:3015` |
-| 16 | `FLGHT416` | 3016 | `http://localhost:3016` |
-| 17 | `FLGHT417` | 3017 | `http://localhost:3017` |
-| 18 | `FLGHT418` | 3018 | `http://localhost:3018` |
-| 19 | `FLGHT419` | 3019 | `http://localhost:3019` |
-| 20 | `FLGHT420` | 3020 | `http://localhost:3020` |
 
 > 💡 The **Dev Port** is only needed for Exercise 4.
 
@@ -94,7 +84,7 @@ Replace `<myIPaddress>` in the command with the IP address your instructor gave 
 ![Lab network diagram — Bob IDE and ACS connecting via SSH tunnel to IBM i on TechZone](img/bob-lab-network.png)
 
 ```bash
-ssh -L 50000:localhost:23 -L 2001:localhost:2001 -L 449:localhost:449 -L 8470:localhost:8470 -L 8471:localhost:8471 -L 8472:localhost:8472 -L 2007:localhost:2007 -L 8473:localhost:8473 -L 8474:localhost:8474 -L 8475:localhost:8475 -L 8476:localhost:8476 -L 2003:localhost:2003 -L 2002:localhost:2002 -L 2006:localhost:2006 -L 2300:localhost:2300 -L 2323:localhost:2323 -L 2005:localhost:2005 -L 8076:localhost:8076 -L 3001:localhost:3001 -L 3002:localhost:3002 -L 3003:localhost:3003 -L 3004:localhost:3004 -L 3005:localhost:3005 -L 3006:localhost:3006 -L 3007:localhost:3007 -L 3008:localhost:3008 -L 3009:localhost:3009 -L 3010:localhost:3010 -L 3011:localhost:3011 -L 3012:localhost:3012 -L 3013:localhost:3013 -L 3014:localhost:3014 -L 3015:localhost:3015 -L 3016:localhost:3016 -L 3017:localhost:3017 -L 3018:localhost:3018 -L 3019:localhost:3019 -L 3020:localhost:3020 -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ITZUSER@<myIPaddress> -i ssh_private_key.pem
+ssh -L 50000:localhost:23 -L 2001:localhost:2001 -L 449:localhost:449 -L 8470:localhost:8470 -L 8471:localhost:8471 -L 8472:localhost:8472 -L 2007:localhost:2007 -L 8473:localhost:8473 -L 8474:localhost:8474 -L 8475:localhost:8475 -L 8476:localhost:8476 -L 2003:localhost:2003 -L 2002:localhost:2002 -L 2006:localhost:2006 -L 2300:localhost:2300 -L 2323:localhost:2323 -L 2005:localhost:2005 -L 8076:localhost:8076 -L 3001:localhost:3001 -L 3002:localhost:3002 -L 3003:localhost:3003 -L 3004:localhost:3004 -L 3005:localhost:3005 -L 3006:localhost:3006 -L 3007:localhost:3007 -L 3008:localhost:3008 -L 3009:localhost:3009 -L 3010:localhost:3010 -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ITZUSER@<myIPaddress> -i ssh_private_key.pem
 ```
 
 **Step 3 — (Optional) Connect IBM i Access Client Solutions for 5250**
