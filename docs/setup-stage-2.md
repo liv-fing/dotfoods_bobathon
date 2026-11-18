@@ -61,11 +61,11 @@ Click the **+** icon above the Bob chat window. Select **New Task in Library Lis
 
 ---
 
-## 0.5 — SSH Tunnel
+## 0.5 — Set Private Key Permissions
 
-Needed for Exercise 3 and for the optional green-screen view.
+Save the private key file from the folder your instructor shared with you and set its permissions so OpenSSH will accept it. You need it to connect Bob to IBM i in 0.4 and to open the SSH tunnel in Exercise 3.
 
-**Step 1 — Set key file permissions**
+**Step 1 — Save your private key and set its permissions**
 
 macOS / Linux:
 ```bash
@@ -77,24 +77,4 @@ Windows (PowerShell, run as Administrator):
 icacls ssh_private_key.pem /inheritance:r /grant:r "$($env:USERNAME):R"
 ```
 
-**Step 2 — Open the SSH tunnel**
-
-Replace `<myIPaddress>` in the command with the IP address your instructor gave you (the user profile is `ITZUSER`):
-
-![Lab network diagram — Bob IDE and ACS connecting via SSH tunnel to IBM i on TechZone](img/bob-lab-network.png)
-
-```bash
-ssh -L 50000:localhost:23 -L 2001:localhost:2001 -L 449:localhost:449 -L 8470:localhost:8470 -L 8471:localhost:8471 -L 8472:localhost:8472 -L 2007:localhost:2007 -L 8473:localhost:8473 -L 8474:localhost:8474 -L 8475:localhost:8475 -L 8476:localhost:8476 -L 2003:localhost:2003 -L 2002:localhost:2002 -L 2006:localhost:2006 -L 2300:localhost:2300 -L 2323:localhost:2323 -L 2005:localhost:2005 -L 8076:localhost:8076 -L 3001:localhost:3001 -L 3002:localhost:3002 -L 3003:localhost:3003 -L 3004:localhost:3004 -L 3005:localhost:3005 -L 3006:localhost:3006 -L 3007:localhost:3007 -L 3008:localhost:3008 -L 3009:localhost:3009 -L 3010:localhost:3010 -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ITZUSER@<myIPaddress> -i ssh_private_key.pem
-```
-
-**Step 3 — (Optional) Connect IBM i Access Client Solutions for 5250**
-Install [IBM i Access Client Solutions](https://www.ibm.com/support/pages/ibm-i-access-client-solutions), open the 5250 Emulator, set IP Address to `127.0.0.1` and port to `50000`. Log in with your username and password, then:
-
-```bash
-ADDLIBLE FLGHT4nn
-CALL FLGHT4nn/FRS021
-```
-
-![Flight Maintenance screen in 5250 emulator](img/ACS-green-screen.png)
-
-> ⚠️ When finished, exit the 5250 screen by pressing **F3**.
+> 💡 The SSH tunnel and the optional green-screen steps are now in **Exercise 3** (steps 3.1 and 3.2).

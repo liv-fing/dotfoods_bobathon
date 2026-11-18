@@ -207,7 +207,7 @@
                 </div>
               </div>
             </div>
-            <div class="info-box">💡 The <strong>Dev Port</strong> is only needed for <strong>Exercise 3</strong>. When Bob asks you to pin your Vite dev server to a port, use your Dev Port. Your React app will be reachable at the React App URL shown — provided your SSH tunnel later in 0.5 is active.</div>
+            <div class="info-box">💡 The <strong>Dev Port</strong> is only needed for <strong>Exercise 3</strong>. When Bob asks you to pin your Vite dev server to a port, use your Dev Port. Your React app will be reachable at the React App URL shown — provided your SSH tunnel from Exercise 3 (step 3.1) is active.</div>
           </div></div>
         </div>
 
@@ -294,11 +294,11 @@
         <!-- Step 5: IBM i Credentials & SSH Tunnel -->
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">0.5 — SSH Tunnel - Needed for Exercise 3 and the Green Screen</div>
+            <div class="uc-title">0.5 — Set Private Key Permissions</div>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
           <div class="uc-body"><div class="uc-body-inner">
-            <p class="uc-desc">Save the private key file from the folder your instructor shared with you, then run an SSH tunnel command on your laptop. The tunnel is needed for the green screen (5250) and for the React app exercise.</p>
+            <p class="uc-desc">Save the private key file from the folder your instructor shared with you and set its permissions so OpenSSH will accept it. You need it to connect Bob to IBM i in 0.4 and to open the SSH tunnel in Exercise 3.</p>
             <div class="mode-steps">
               <div class="mode-step">
                 <div class="step-num">1</div>
@@ -310,37 +310,6 @@
                   <div class="step-desc mt-m"><strong>Windows</strong> — run in <strong>PowerShell</strong> (run as Administrator if the command fails):</div>
                   <div class="step-prompt"><pre>icacls ssh_private_key.pem /inheritance:r /grant:r "$($env:USERNAME):R"</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
                   <div class="step-desc">This removes inherited permissions and grants only your user read access — required by OpenSSH on Windows.</div>
-                </div>
-              </div>
-              <div class="mode-step">
-                <div class="step-num">2</div>
-                <div class="step-body">
-                  <div class="step-title">Open the SSH tunnel (required for 5250, database access &amp; React app ports)</div>
-                  <div class="step-desc">Run the command below from the folder containing <code>ssh_private_key.pem</code>, or replace <code>ssh_private_key.pem</code> in the command with the full path to the file. The command uses the IP address you entered in step 0.3 and the user profile <code>ITZUSER</code>.</div>
-                  <div class="step-desc"><strong>macOS / Linux</strong> — run in <strong>Terminal</strong> (no <code>sudo</code> needed — all forwarded ports are above 1024). <strong>Windows</strong> — run in <strong>PowerShell</strong> or <strong>Windows Terminal</strong>; no <code>sudo</code>.</div>
- <div class="step-screenshot">
- <img src="img/bob-lab-network.png" alt="Lab network diagram — Bob IDE and ACS connecting via SSH tunnel to IBM i on TechZone"/>
- <div class="step-screenshot-caption">Lab connectivity overview — Bob IDE and ACS connect through an SSH tunnel to your IBM i TechZone LPAR</div>
- </div>
-                  <div class="step-prompt"><pre>ssh -L 50000:localhost:23 -L 2001:localhost:2001 -L 449:localhost:449 -L 8470:localhost:8470 -L 8471:localhost:8471 -L 8472:localhost:8472 -L 2007:localhost:2007 -L 8473:localhost:8473 -L 8474:localhost:8474 -L 8475:localhost:8475 -L 8476:localhost:8476 -L 2003:localhost:2003 -L 2002:localhost:2002 -L 2006:localhost:2006 -L 2300:localhost:2300 -L 2323:localhost:2323 -L 2005:localhost:2005 -L 8076:localhost:8076 -L 3001:localhost:3001 -L 3002:localhost:3002 -L 3003:localhost:3003 -L 3004:localhost:3004 -L 3005:localhost:3005 -L 3006:localhost:3006 -L 3007:localhost:3007 -L 3008:localhost:3008 -L 3009:localhost:3009 -L 3010:localhost:3010 -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ITZUSER@&lt;myIPaddress&gt; -i ssh_private_key.pem</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="info-box">💡 <strong>No IBM ID yet?</strong> Create one for free at <a href="https://www.ibm.com/account" target="_blank" rel="noopener">ibm.com/account</a>. For 5250 or database access, install <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>.</div>
-                </div>
-              </div>
-              <div class="mode-step">
-                <div class="step-num">3</div>
-                <div class="step-body">
-                  <div class="step-title">(Optional) Connect IBM i Access Client Solutions for 5250</div>
-                  <div class="step-desc">Only needed if you want to view the green screen. Install <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>, then make sure the SSH tunnel from step 2 is running.</div>
-                  <div class="warn-box mb-s">⚠️ <strong>ACS requires Java.</strong> If ACS does not open after installation, install a supported Java runtime (e.g. <a href="https://adoptium.net" target="_blank" rel="noopener">Eclipse Temurin</a>) and try again.</div>
-                  <div class="step-desc">Open the 5250 Emulator. Set IP Address to <code>127.0.0.1</code> and port to <code>50000</code>. If it tries port 23, override it in Communication → Configure → Destination Port: <code>50000</code>. Log in with your username and password.</div>
-                  <div class="step-desc">Add your library and open the Flight Maintenance screen:</div>
-                  <div class="step-prompt"><pre>ADDLIBLE FLGHT4nn</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="step-prompt mt-s"><pre>CALL FLGHT4nn/FRS021</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="step-screenshot">
-                    <img src="img/ACS-green-screen.png" alt="Flight Maintenance screen in 5250 emulator"/>
-                    <div class="step-screenshot-caption">Flight Maintenance screen in the 5250 emulator</div>
-                  </div>
-                  <div class="warn-box">⚠️ When finished, exit the 5250 screen by pressing <strong>F3</strong>.</div>
                 </div>
               </div>
             </div>
