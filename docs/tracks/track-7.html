@@ -21,72 +21,38 @@
 
   <div class="card-detail">
     <div class="card-detail-inner">
-      <div class="detail-intro">In this exercise you take an existing green-screen application and give it a modern web face. Bob looks at a screenshot of the FLIGHT400 <em>Create Order</em> screen, works out what the screen does, and builds a new web version of it using React and the IBM Carbon design system. The app runs on your IBM i, and you open it in your own browser. It takes about 30 minutes.<br><br><strong>What you will do:</strong> open a secure connection to your IBM i (3.1), optionally look at the original green screen first (3.2), give Bob a short helper guide so it knows how to build web apps on IBM i (3.3), ask Bob to build the app (3.4), then start it and open it in your browser (3.5).<br><br>If the optional green screen step in 3.2 does not work for you, skip it and go straight to 3.3. The web app does not need it.</div>
+      <div class="detail-intro">In this exercise you take an existing green-screen application and give it a modern web face. Bob looks at a screenshot of the FLIGHT400 <em>Create Order</em> screen, works out what the screen does, and builds a new web version of it using React and the IBM Carbon design system. The app runs on your IBM i, and you open it in your own browser. It takes about 30 minutes.<br><br><strong>What you will do:</strong> open a secure connection to your IBM i (3.1), give Bob a short helper guide so it knows how to build web apps on IBM i (3.2), ask Bob to build the app (3.3), then start it, open it in your browser, and stop it when you are done (3.4).</div>
 
       <div class="use-cases">
 
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">3.1 — Open the SSH Tunnel (Needed for Both Parts)</div>
+            <div class="uc-title">3.1 — Open the SSH Tunnel</div>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
           <div class="uc-body"><div class="uc-body-inner">
-            <p class="uc-desc">The SSH tunnel connects your laptop to the IBM i. The green screen view uses it, and you also need it to open your React app in your browser. Open it before you continue. You need the <code>ssh_private_key.pem</code> file you prepared in Setup 0.5.</p>
+            <p class="uc-desc">The SSH tunnel connects your laptop to your IBM i, so you can open your React app in your browser later in this exercise. Open it before you continue. You need the <code>ssh_private_key.pem</code> file you prepared in Setup 0.5.</p>
             <div class="mode-steps">
               <div class="mode-step">
                 <div class="step-num">1</div>
                 <div class="step-body">
-                  <div class="step-title">Open the SSH tunnel (required for 5250, database access &amp; React app ports)</div>
+                  <div class="step-title">Open the SSH tunnel (required to open your React app)</div>
                   <div class="step-desc">Run the command below from the folder containing <code>ssh_private_key.pem</code>, or replace <code>ssh_private_key.pem</code> in the command with the full path to the file. The command uses the IP address you entered in step 0.3 and the user profile <code>ITZUSER</code>.</div>
                   <div class="step-desc"><strong>macOS / Linux</strong> — run in <strong>Terminal</strong> (no <code>sudo</code> needed — all forwarded ports are above 1024). <strong>Windows</strong> — run in <strong>PowerShell</strong> or <strong>Windows Terminal</strong>; no <code>sudo</code>.</div>
  <div class="step-screenshot">
- <img src="img/bob-lab-network.png" alt="Lab network diagram — Bob IDE and ACS connecting via SSH tunnel to IBM i on TechZone"/>
- <div class="step-screenshot-caption">Lab connectivity overview — Bob IDE and ACS connect through an SSH tunnel to your IBM i TechZone LPAR</div>
+ <img src="img/bob-lab-network.png" alt="Lab network diagram — Bob IDE connecting via SSH tunnel to IBM i on TechZone"/>
+ <div class="step-screenshot-caption">Lab connectivity overview — Bob IDE connects through an SSH tunnel to your IBM i TechZone LPAR</div>
  </div>
                   <div class="step-prompt"><pre>ssh -L 50000:localhost:23 -L 2001:localhost:2001 -L 449:localhost:449 -L 8470:localhost:8470 -L 8471:localhost:8471 -L 8472:localhost:8472 -L 2007:localhost:2007 -L 8473:localhost:8473 -L 8474:localhost:8474 -L 8475:localhost:8475 -L 8476:localhost:8476 -L 2003:localhost:2003 -L 2002:localhost:2002 -L 2006:localhost:2006 -L 2300:localhost:2300 -L 2323:localhost:2323 -L 2005:localhost:2005 -L 8076:localhost:8076 -L 3001:localhost:3001 -L 3002:localhost:3002 -L 3003:localhost:3003 -L 3004:localhost:3004 -L 3005:localhost:3005 -L 3006:localhost:3006 -L 3007:localhost:3007 -L 3008:localhost:3008 -L 3009:localhost:3009 -L 3010:localhost:3010 -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 ITZUSER@&lt;myIPaddress&gt; -i ssh_private_key.pem</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="info-box">💡 <strong>No IBM ID yet?</strong> Create one for free at <a href="https://www.ibm.com/account" target="_blank" rel="noopener">ibm.com/account</a>. For 5250 or database access, install <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>.</div>
                 </div>
               </div>
             </div>
           </div></div>
         </div>
 
-        <div class="setup-section-label" style="margin-top:1.5rem">Before — the green screen (optional)</div>
-
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">3.2 — See the Green Screen First (Optional)</div>
-            <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
-          </div>
-          <div class="uc-body"><div class="uc-body-inner">
-            <p class="uc-desc">This step shows the original 5250 green screen so you can compare it with the React app. <strong>If anything in this step does not work, skip it and go straight to 3.3</strong> — the React app does not need it.</p>
-            <div class="mode-steps">
-              <div class="mode-step">
-                <div class="step-num">1</div>
-                <div class="step-body">
-                  <div class="step-title">(Optional) Connect IBM i Access Client Solutions for 5250</div>
-                  <div class="step-desc">Only needed if you want to view the green screen. Install <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>, then make sure the SSH tunnel from step 3.1 is running.</div>
-                  <div class="warn-box mb-s">⚠️ <strong>ACS requires Java.</strong> If ACS does not open after installation, install a supported Java runtime (e.g. <a href="https://adoptium.net" target="_blank" rel="noopener">Eclipse Temurin</a>) and try again.</div>
-                  <div class="step-desc">Open the 5250 Emulator. Set IP Address to <code>127.0.0.1</code> and port to <code>50000</code>. If it tries port 23, override it in Communication → Configure → Destination Port: <code>50000</code>. Log in with your username and password.</div>
-                  <div class="step-desc">Add your library and open the Flight Maintenance screen:</div>
-                  <div class="step-prompt"><pre>ADDLIBLE FLGHT4nn</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="step-prompt mt-s"><pre>CALL FLGHT4nn/FRS021</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
-                  <div class="step-screenshot">
-                    <img src="img/ACS-green-screen.png" alt="Flight Maintenance screen in 5250 emulator"/>
-                    <div class="step-screenshot-caption">Flight Maintenance screen in the 5250 emulator</div>
-                  </div>
-                  <div class="warn-box">⚠️ When finished, exit the 5250 screen by pressing <strong>F3</strong>.</div>
-                </div>
-              </div>
-            </div>
-          </div></div>
-        </div>
-
-        <div class="setup-section-label" style="margin-top:1.5rem">After — build the React app</div>
-
-        <div class="use-case">
-          <div class="use-case-header">
-            <div class="uc-title">3.3 — Create a Helper Skill (Sharpen Your Skill)</div>
+            <div class="uc-title">3.2 — Create a Helper Skill (Sharpen Your Skill)</div>
             <span class="mode-pill mode-pill--agent">Agent mode</span>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
@@ -729,7 +695,7 @@ These rules apply before any `npm`, `node`, `npx`, or `vite` command:
 
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">3.4 — Generate the React App</div>
+            <div class="uc-title">3.3 — Generate the React App</div>
             <span class="mode-pill mode-pill--developer">IBM i Developer mode</span>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
@@ -757,7 +723,7 @@ These rules apply before any `npm`, `node`, `npx`, or `vite` command:
 
         <div class="use-case">
           <div class="use-case-header">
-            <div class="uc-title">3.5 — Start the App and Open It in Your Browser</div>
+            <div class="uc-title">3.4 — Start the App and Open It in Your Browser</div>
             <div class="uc-arrow" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l5 5 5-5"/></svg></div>
           </div>
           <div class="uc-body"><div class="uc-body-inner">
@@ -785,7 +751,7 @@ These rules apply before any `npm`, `node`, `npx`, or `vite` command:
                 </div>
               </div>
             </div>
-            <p class="uc-desc">In addition to the sample Skill created in step 1, a set of unique Skills shipped with the <strong>IBM Bob Premium Package for i</strong> powered this exercise:</p>
+            <p class="uc-desc">In addition to the sample Skill you created in step 3.2, a set of unique Skills shipped with the <strong>IBM Bob Premium Package for i</strong> powered this exercise:</p>
             <table class="data-table">
               <thead>
                 <tr><th>Tool / Skill</th><th>Role</th></tr>

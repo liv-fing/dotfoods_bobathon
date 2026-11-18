@@ -114,7 +114,10 @@
               <div class="mode-step">
                 <div class="step-num">2</div>
                 <div class="step-body">
-                  <div class="step-desc"><strong>Optional — see it live in a 5250 emulator:</strong> With the SSH tunnel from <strong>Exercise 3 → 3.1 and 3.2</strong> running, open <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>, connect, then:</div>
+                  <div class="step-desc"><strong>Optional — see it live in a 5250 emulator:</strong> With the SSH tunnel from <strong>Exercise 3 → 3.1</strong> running, install <a href="https://www.ibm.com/support/pages/ibm-i-access-client-solutions" target="_blank" rel="noopener">IBM i Access Client Solutions</a>. If this does not work for you, skip it — the rest of the exercise does not need it.</div>
+                  <div class="warn-box mb-s">⚠️ <strong>ACS requires Java.</strong> If ACS does not open after installation, install a supported Java runtime (e.g. <a href="https://adoptium.net" target="_blank" rel="noopener">Eclipse Temurin</a>) and try again.</div>
+                  <div class="step-desc">Open the 5250 Emulator. Set IP Address to <code>127.0.0.1</code> and port to <code>50000</code>. If it tries port 23, override it in Communication → Configure → Destination Port: <code>50000</code>. Log in with your username and password.</div>
+                  <div class="step-desc">Add your library and open the Flight Maintenance screen:</div>
                   <div class="step-prompt"><pre>ADDLIBLE FLGHT4nn
 CALL FLGHT4nn/FRS021</pre><button class="copy-btn" aria-label="Copy">Copy</button></div>
                   <div class="step-screenshot">

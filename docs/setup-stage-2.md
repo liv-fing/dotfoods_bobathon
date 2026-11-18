@@ -77,4 +77,4 @@ Windows (PowerShell, run as Administrator):
 icacls ssh_private_key.pem /inheritance:r /grant:r "$($env:USERNAME):R"
 ```
 
-> 💡 The SSH tunnel and the optional green-screen steps are now in **Exercise 3** (steps 3.1 and 3.2).
+> 💡 The SSH tunnel is now in **Exercise 3** (step 3.1).
